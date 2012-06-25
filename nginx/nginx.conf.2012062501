@@ -1,0 +1,38 @@
+
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    passenger_root /home/tyler/.rvm/gems/ruby-1.9.3-p125@passenger/gems/passenger-3.0.11;
+    passenger_ruby /home/tyler/.rvm/wrappers/ruby-1.9.3-p125@passenger/ruby;
+
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    server {
+        listen       80;
+        listen       demo.cloudfunded.com:80;
+        server_name  demo.cloudfunded.com;
+ 
+        root /home/tyler/src/dev/cloud_funded/public;
+        rails_env production;
+        passenger_enabled on;
+    }
+}
